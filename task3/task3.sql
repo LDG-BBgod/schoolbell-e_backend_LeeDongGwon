@@ -1,3 +1,4 @@
+/* 문제 3.1 */
 /* 사용자의 정보를 관리하는 테이블 */
 CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY, -- 고유키
@@ -29,3 +30,23 @@ CREATE TABLE approval_step (
   FOREIGN KEY (approval_request_id) REFERENCES approval_request(id),
   FOREIGN KEY (user_id) REFERENCES user(id)
 )
+
+/* 문제 3.2 */
+SELECT 
+  approval_step.id AS step_id,
+  approval_step.step AS step_number,
+  approval_step.status AS step_status,
+  approval_request.id AS request_id,
+  approval_request.title AS request_title,
+  approval_request.content AS request_content,
+  approval_request.status AS request_status,
+  user.name AS user_name,
+  user.email AS user_email
+FROM
+  approval_step
+JOIN
+  approval_request ON approval_step.approval_request_id = approval_request.id
+JOIN
+  user ON approval_request.user_id = user.id
+WHERE
+  approval_step.user_id = ? AND approval_step.status = 'WAITING'
