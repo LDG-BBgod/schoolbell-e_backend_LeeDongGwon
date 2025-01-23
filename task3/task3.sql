@@ -4,7 +4,7 @@ CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY, -- 고유키
   name VARCHAR(50) NOT NULL,         -- 사용자 이름                 
   email VARCHAR(50) UNIQUE NOT NULL, -- 사용자 이메일
-  role ENUM('requester', 'approver') NOT NULL, -- 사용자 역할
+  rank INT NOT NULL,                 -- 사용자 직급(ex 1: 교사, 2:교감, 3: 교장)
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    -- 생성 시간
 )
 
@@ -44,9 +44,9 @@ SELECT
   user.email AS user_email
 FROM
   approval_step
-JOIN
+INNER JOIN
   approval_request ON approval_step.approval_request_id = approval_request.id
-JOIN
+INNER JOIN
   user ON approval_request.user_id = user.id
 WHERE
   approval_step.user_id = ? AND approval_step.status = 'WAITING'

@@ -26,7 +26,7 @@ const stack: [number, number][] = [];
 
 <br>
 
-- 선택된 노드의 상하좌우와 대각선을 탐색하기 위해 dx,dy 생성
+- 탐색 방향 설정
 ```ts
 const dx: number[] = [1, 1, 0, -1, -1, -1, 0, 1];
 const dy: number[] = [0, 1, 1, 1, 0, -1, -1, -1];

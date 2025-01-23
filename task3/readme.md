@@ -6,15 +6,14 @@
 
 <br>
 
-- user 테이블은 해당 시스템을 사용하는 사용자의 정보를 담고있는 테이블입니다.
-  사용자는 requester와 approver의 권한을 가질 수 있습니다.
+- user 사용자 정보를 저장하며 고유 ID, 이름, 이메일, 직급 등을 포함합니다.
 
 ```sql
 CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY, -- 고유키
   name VARCHAR(50) NOT NULL,         -- 사용자 이름
   email VARCHAR(50) UNIQUE NOT NULL, -- 사용자 이메일
-  role ENUM('requester', 'approver') NOT NULL, -- 사용자 역할
+  rank INT NOT NULL,                 -- 사용자 직급(ex 1: 교사, 2:교감, 3: 교장)
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    -- 생성 시간
 )
 ```
@@ -39,7 +38,7 @@ CREATE TABLE approval_request (
 <br>
 
 - approval_step 테이블은 결재 요청의 각 단계에 대한 정보를 관리합니다.
-  연관된 결재요청의 기본정보와 승인자를 참조합니다. step에 결재 단계를 저장하고 '대기중, 승인, 반려, 활성화 되지 않음' 4가지의 상태를 가질 수 있습니다.
+  연관된 결재요청의 기본정보와 승인할 사용자를 참조합니다. step에 결재 단계를 저장하고 '대기중, 승인, 반려, 활성화 되지 않음' 4가지의 상태를 가질 수 있습니다.
 
 ```sql
 CREATE TABLE approval_step (
@@ -58,14 +57,14 @@ CREATE TABLE approval_step (
 
 1. 결재 요청 생성
 
-  - 요청자가 결재 요청을 생성합니다.
+  - 사용자가 결재 요청을 생성합니다.
   - 요청은 approval_request 테이블에 저장되며, 초기 상태는 'WAITING'입니다.
 
 <br>
 
 2. 결재 단계 생성
 
-  - 각 결재 요청에 대해 단계별 승인자와 순서를 정의합니다.
+  - 결재 요청에 대해 각 단계별 승인자와 순서를 정의합니다.
   - 모든 단계의 상태는 기본적으로 'NOT_ACTIVED'로 설정됩니다.
   - 단, 첫 번째 단계는 활성화 상태로 시작하며 상태는 'WAITING'입니다.
 
